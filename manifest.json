@@ -1,0 +1,12 @@
+{
+    "display_name": "SillyTavern-AdditionalProxyData",
+    "loading_order": 9,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "",
+    "author": "Netrve",
+    "version": "1.4",
+    "homePage": "https://github.com/Dakraid/SillyTavern-AdditionalProxyData",
+    "auto_update": true
+}
