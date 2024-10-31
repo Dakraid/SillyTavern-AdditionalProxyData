@@ -7,7 +7,7 @@ import {extension_settings } from '../../../extensions.js';
 const extensionName = "SillyTavern-AdditionalProxyData";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const defaultSettings = {
-    cot_prompt: "{username}: [PAUSE YOUR ROLEPLAY. Answer all questions concisely, in full sentences, and continuous text.] Think about the story, and consider information you have, especially the description and setting of {character}. What do you have to consider to maintain the characters personalities? How do the characters react and what are their personality traits? What physical space are you in? How do you maintain a consistent progression?Finally: Remind yourself to not act or talk for {username}. What rules should you follow for formatting and style? Only answer the questions as instructed. Remember you are narrating a story for the user, don't include active elements for them.",
+    cot_prompt: "{username}: [PAUSE YOUR ROLEPLAY. Answer all questions concisely, in full sentences, and continuous text.] Think about the story, and consider information you have, especially the description and setting of {character}. What do you have to consider to maintain the characters personalities? How do the characters react and what are their personality traits? What physical space are you in? How do you maintain a consistent progression? Finally: Remind yourself to not act or talk for {username}. What rules should you follow for formatting and style? Only answer the questions as instructed. Remember you are narrating a story for the user, don't include active elements for them.",
 };
 
 function onCoTPromptInput() {
@@ -26,14 +26,14 @@ async function loadSettings() {
         Object.assign(extension_settings[extensionName], defaultSettings);
     }
 
-    $('#apd_prompt').val(extension_settings[extensionName].prompt).trigger('input');
+    $('#apd_prompt').val(extension_settings[extensionName].cot_prompt).trigger('input');
 }
 
 eventSource.on(event_types.TEXT_COMPLETION_SETTINGS_READY, (args) =>{
     Object.assign(args, {
         'username': name1,
         'character': name2,
-        'cot_prompt': extension_settings[extensionName].prompt,
+        'cot_prompt': extension_settings[extensionName].cot_prompt,
     });
 });
 
