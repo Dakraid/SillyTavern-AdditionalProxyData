@@ -1,5 +1,5 @@
 import {eventSource, event_types, name1, name2, saveSettingsDebounced} from '../../../../script.js';
-import {extension_settings } from '../../../extensions.js';
+import {extension_settings, doExtrasFetch} from '../../../extensions.js';
 // Used during development
 // import {eventSource, event_types, name1, name2, saveSettingsDebounced} from '../../../../public/script.js';
 // import {extension_settings } from '../../../../public/scripts/extensions.js';
@@ -22,11 +22,17 @@ function onCoTPromptRestoreClick() {
 
 async function onCoTGetLastClick() {
     // Update to pull the URL from settings instead of hard coding it
-    const response = await fetch(`http://127.0.0.1:5000/v1/thought`, {
+    const url = new URL('http://127.0.0.1:5000/v1/thought');
+
+    const apiResult = await doExtrasFetch(url, {
         method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Bypass-Tunnel-Reminder': 'bypass',
+        },
     });
 
-    const data = await response.json();
+    const data = await apiResult.json();
     $('#apd_last_thought').val(data).trigger('input');
 }
 
