@@ -1,5 +1,5 @@
 import {eventSource, event_types, name1, name2, saveSettingsDebounced} from '../../../../script.js';
-import {extension_settings, doExtrasFetch} from '../../../extensions.js';
+import {extension_settings} from '../../../extensions.js';
 // Used during development
 // import {eventSource, event_types, name1, name2, saveSettingsDebounced} from '../../../../public/script.js';
 // import {extension_settings } from '../../../../public/scripts/extensions.js';
@@ -8,6 +8,7 @@ const extensionName = "SillyTavern-AdditionalProxyData";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const defaultSettings = {
     cot_prompt: "{username}: [PAUSE YOUR ROLEPLAY. Answer all questions concisely, in full sentences, and continuous text.] Think about the story, and consider information you have, especially the description and setting of {character}. What do you have to consider to maintain the characters personalities? How do the characters react and what are their personality traits? What physical space are you in? How do you maintain a consistent progression? Finally: Remind yourself to not act or talk for {username}. What rules should you follow for formatting and style? Only answer the questions as instructed. Remember you are narrating a story for the user, don't include active elements for them.",
+    thought_endpoint: "http://127.0.0.1:5000/v1/thought",
 };
 
 function onCoTPromptInput() {
@@ -16,20 +17,21 @@ function onCoTPromptInput() {
     saveSettingsDebounced();
 }
 
+function onCoTEndpointInput() {
+    const value = $(this).val();
+    extension_settings[extensionName].thought_endpoint = value;
+    saveSettingsDebounced();
+}
+
 function onCoTPromptRestoreClick() {
     $('#apd_prompt').val(defaultSettings.cot_prompt).trigger('input');
 }
 
 async function onCoTGetLastClick() {
-    // Update to pull the URL from settings instead of hard coding it
-    const url = new URL('http://127.0.0.1:5000/v1/thought');
+    const url = new URL(extension_settings[extensionName].thought_endpoint);
 
-    const apiResult = await doExtrasFetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Bypass-Tunnel-Reminder': 'bypass',
-        },
+    const apiResult = await fetch(url, {
+        method: 'GET'
     });
 
     const data = await apiResult.json();
@@ -43,6 +45,7 @@ async function loadSettings() {
     }
 
     $('#apd_prompt').val(extension_settings[extensionName].cot_prompt).trigger('input');
+    $('#apd_thought_endpoint').val(extension_settings[extensionName].thought_endpoint).trigger('input');
 }
 
 eventSource.on(event_types.TEXT_COMPLETION_SETTINGS_READY, (args) =>{
@@ -58,6 +61,7 @@ jQuery(async () => {
 
     $("#extensions_settings").append(settingsHtml);
     $('#apd_prompt').on('input', onCoTPromptInput);
+    $('#apd_thought_endpoint').on('input', onCoTEndpointInput);
     $('#apd_prompt_restore').on('click', onCoTPromptRestoreClick);
     $('#apd_get_last_thought').on('click', onCoTGetLastClick);
 

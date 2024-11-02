@@ -14,6 +14,11 @@
                 </label>
                 <textarea id="apd_prompt" class="text_pole textarea_compact" rows="6" placeholder="This prompt will be send to the secondary LLM for CoT."></textarea>
                 <div class="height32px"></div>
+                <label for="apd_thought_endpoint">
+                    Thought API Endpoint
+                </label>
+                <input id="apd_thought_endpoint" class="text_pole" type="text" placeholder="http://127.0.0.1:5000/v1/thought" />
+                <div class="height32px"></div>
                 <label for="apd_last_thought">
                     <span>Last CoT Result</span>
                     <div id="apd_get_last_thought" class="menu_button menu_button_icon" title="Get last thought from the secondary LLM.">
