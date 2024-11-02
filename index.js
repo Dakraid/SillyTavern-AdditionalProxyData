@@ -31,7 +31,6 @@ async function onCoTGetLastClick() {
     const url = new URL(extension_settings[extensionName].thought_endpoint);
 
     const apiResult = await fetch(url, {
-        mode: 'no-cors',
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
