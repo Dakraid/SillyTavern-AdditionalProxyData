@@ -40,7 +40,7 @@ async function onCoTGetLastClick() {
     });
 
     const data = await apiResult.json();
-    $('#apd_last_thought').val(data).trigger('input');
+    $('#apd_last_thought').val(data.content).trigger('input');
 }
 
 async function loadSettings() {
