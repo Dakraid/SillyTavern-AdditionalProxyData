@@ -20,6 +20,16 @@ function onCoTPromptRestoreClick() {
     $('#apd_prompt').val(defaultSettings.cot_prompt).trigger('input');
 }
 
+async function onCoTGetLastClick() {
+    // Update to pull the URL from settings instead of hard coding it
+    const response = await fetch(`http://127.0.0.1:5000/v1/thought`, {
+        method: 'GET',
+    });
+
+    const data = await response.json();
+    $('#apd_last_thought').val(data).trigger('input');
+}
+
 async function loadSettings() {
     extension_settings[extensionName] = extension_settings[extensionName] || {};
     if (Object.keys(extension_settings[extensionName]).length === 0) {
@@ -43,6 +53,7 @@ jQuery(async () => {
     $("#extensions_settings").append(settingsHtml);
     $('#apd_prompt').on('input', onCoTPromptInput);
     $('#apd_prompt_restore').on('click', onCoTPromptRestoreClick);
+    $('#apd_get_last_thought').on('click', onCoTGetLastClick);
 
     await loadSettings();
 });
