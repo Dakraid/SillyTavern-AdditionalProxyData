@@ -1,4 +1,4 @@
-import {eventSource, event_types, name1, name2, saveSettingsDebounced} from '../../../../script.js';
+import {eventSource, event_types, name1, name2, saveSettingsDebounced, getRequestHeaders} from '../../../../script.js';
 import {extension_settings} from '../../../extensions.js';
 // Used during development
 // import {eventSource, event_types, name1, name2, saveSettingsDebounced} from '../../../../public/script.js';
@@ -31,7 +31,8 @@ async function onCoTGetLastClick() {
     const url = new URL(extension_settings[extensionName].thought_endpoint);
 
     const apiResult = await fetch(url, {
-        method: 'GET'
+        method: 'GET',
+        headers: getRequestHeaders(),
     });
 
     const data = await apiResult.json();
