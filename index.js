@@ -32,7 +32,11 @@ async function onCoTGetLastClick() {
 
     const apiResult = await fetch(url, {
         method: 'GET',
-        headers: getRequestHeaders(),
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            ...getRequestHeaders(),
+        },
     });
 
     const data = await apiResult.json();
