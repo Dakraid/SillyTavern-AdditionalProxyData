@@ -1,7 +1,7 @@
 import {eventSource, event_types, name1, name2, saveSettingsDebounced, getRequestHeaders} from '../../../../script.js';
 import {extension_settings} from '../../../extensions.js';
 // Used during development
-// import {eventSource, event_types, name1, name2, saveSettingsDebounced} from '../../../../public/script.js';
+// import {eventSource, event_types, name1, name2, saveSettingsDebounced, getRequestHeaders} from '../../../../public/script.js';
 // import {extension_settings } from '../../../../public/scripts/extensions.js';
 
 const extensionName = "SillyTavern-AdditionalProxyData";
@@ -69,7 +69,7 @@ eventSource.on(event_types.TEXT_COMPLETION_SETTINGS_READY, (args) =>{
     });
 });
 
-eventSource.on(event_types.CHAT_COMPLETION_SETTINGS_READY, (args) =>{
+eventSource.on(event_types.CHAT_COMPLETION_PROMPT_READY, (args) =>{
     Object.assign(args, {
         'username': name1,
         'character': name2,
