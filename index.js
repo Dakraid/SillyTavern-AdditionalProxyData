@@ -8,6 +8,7 @@ const extensionName = "SillyTavern-AdditionalProxyData";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const defaultSettings = {
     cot_prompt: "{username}: [PAUSE YOUR ROLEPLAY. Answer all questions concisely, in full sentences, and continuous text.] Think about the story, and consider information you have, especially the description and setting of {character}. What do you have to consider to maintain the characters personalities? How do the characters react and what are their personality traits? What physical space are you in? How do you maintain a consistent progression? Finally: Remind yourself to not act or talk for {username}. What rules should you follow for formatting and style? Only answer the questions as instructed. Remember you are narrating a story for the user, don't include active elements for them.",
+    overwrite: "",
     thought_endpoint: "http://127.0.0.1:5000/v1/thought",
     min_messages: 1,
 };
@@ -15,6 +16,12 @@ const defaultSettings = {
 function onCoTPromptInput() {
     const value = $(this).val();
     extension_settings[extensionName].cot_prompt = value;
+    saveSettingsDebounced();
+}
+
+function onOverwritePromptInput() {
+    const value = $(this).val();
+    extension_settings[extensionName].overwrite = value;
     saveSettingsDebounced();
 }
 
@@ -32,6 +39,10 @@ function onCoTMinMessages() {
 
 function onCoTPromptRestoreClick() {
     $('#apd_prompt').val(defaultSettings.cot_prompt).trigger('input');
+}
+
+function onOverwriteRestoreClick() {
+    $('#apd_overwrite').val(defaultSettings.overwrite).trigger('input');
 }
 
 async function onCoTGetLastClick() {
@@ -56,6 +67,7 @@ async function loadSettings() {
     }
 
     $('#apd_prompt').val(extension_settings[extensionName].cot_prompt).trigger('input');
+    $('#apd_overwrite').val(extension_settings[extensionName].overwrite).trigger('input');
     $('#apd_thought_endpoint').val(extension_settings[extensionName].thought_endpoint).trigger('input');
     $('#apd_min_messages').val(extension_settings[extensionName].min_messages).trigger('input');
 }
@@ -69,13 +81,16 @@ eventSource.on(event_types.TEXT_COMPLETION_SETTINGS_READY, (args) =>{
     });
 });
 
-eventSource.on(event_types.CHAT_COMPLETION_PROMPT_READY, (args) =>{
-    Object.assign(args, {
+eventSource.on(event_types.CHAT_COMPLETION_SETTINGS_READY, async (args) => {
+    const settings = {
         'username': name1,
         'character': name2,
         'cot_prompt': extension_settings[extensionName].cot_prompt,
         'cot_min_messages': extension_settings[extensionName].min_messages,
-    });
+    };
+    const overwrite = JSON.parse(extension_settings[extensionName].overwrite);
+    const merged = Object.assign({}, settings, overwrite);
+    Object.assign(args, { 'custom_include_body': merged });
 });
 
 jQuery(async () => {
@@ -83,9 +98,11 @@ jQuery(async () => {
 
     $("#extensions_settings").append(settingsHtml);
     $('#apd_prompt').on('input', onCoTPromptInput);
+    $('#apd_overwrite').on('input', onOverwritePromptInput);
     $('#apd_thought_endpoint').on('input', onCoTEndpointInput);
     $('#apd_min_messages').on('input', onCoTMinMessages);
     $('#apd_prompt_restore').on('click', onCoTPromptRestoreClick);
+    $('#apd_overwrite_restore').on('click', onOverwriteRestoreClick);
     $('#apd_get_last_thought').on('click', onCoTGetLastClick);
 
     await loadSettings();

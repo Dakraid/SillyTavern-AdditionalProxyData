@@ -24,6 +24,14 @@
                 </label>
                 <input id="apd_min_messages" class="text_pole" type="number" placeholder="1" />
                 <div class="height32px"></div>
+                <label for="apd_overwrite" class="title_restorable gap5px">
+                    <span>CC Custom Overwrite</span>
+                    <div id="apd_overwrite_restore" title="Restore default overwrite" class="right_menu_button">
+                        <div class="fa-solid fa-clock-rotate-left"></div>
+                    </div>
+                </label>
+                <textarea id="apd_overwrite" class="text_pole textarea_compact" rows="6" placeholder="This prompt will be send to the secondary LLM for CoT."></textarea>
+                <div class="height32px"></div>
                 <label for="apd_last_thought">
                     <span>Last CoT Result</span>
                     <div id="apd_get_last_thought" class="menu_button menu_button_icon" title="Get last thought from the secondary LLM.">
