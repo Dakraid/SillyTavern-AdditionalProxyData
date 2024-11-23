@@ -90,7 +90,7 @@ eventSource.on(event_types.CHAT_COMPLETION_SETTINGS_READY, async (args) => {
     };
     const overwrite = JSON.parse(extension_settings[extensionName].overwrite);
     const merged = Object.assign({}, settings, overwrite);
-    Object.assign(args, { 'custom_include_body': merged });
+    Object.assign(args, { 'custom_include_body': JSON.stringify(merged) });
 });
 
 jQuery(async () => {
